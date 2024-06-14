@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real-Time Weather Updates</title>
+</head>
+<body>
+  <h1>Real-Time Weather Updates for Montpellier</h1>
+  <div id="weather">
+    <p>Loading weather data...</p>
+  </div>
+
+  <script>
+    const eventSource = new EventSource('/events');
+    const weatherDiv = document.getElementById('weather');
+
+    eventSource.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      if (data.error) {
+        weatherDiv.innerHTML = `<p>${data.error}</p>`;
+      } else {
+        weatherDiv.innerHTML = `
+          <p>City: ${data.city}</p>
+          <p>Temperature: ${data.temperature}°C</p>
+          <p>Description: ${data.description}</p>
+        `;
+      }
+    };
+  </script>
+</body>
+</html>
